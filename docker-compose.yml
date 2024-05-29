@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: demo
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3310:3306"
+
+  spring-boot-app:
+    image: app_gradle:1.0
+    container_name: spring-boot-container
+    ports:
+      - "8080:8080"
+  # 어플리케이션이 시작되기 전에 의존하는 서비스를 정의합니다. 여기서는 MySQL 서비스가 먼저 시작되어야 하므로 depends_on을 사용하여 의존성을 명시합니다.
+    depends_on:
+      - mysql
+  # Spring Boot 어플리케이션에 전달할 환경 변수들을 설정합니다. 여기서는 MySQL 데이터베이스에 접속하기 위한 데이터 소스 URL 및 계정 정보를 설정합니다
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
