@@ -1,5 +1,24 @@
 version: '3'
 services:
+  nginx:
+    image: nginx
+    container_name: nginx-container
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d # 왼쪽이 로컬 경로, 오른쪽이 도커 컨테이너 내부 경로
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-boot-app
+
+  redis:
+    image: redis
+    container_name: redis-container
+#    command: ["redis-server","--requirepass","password"]
+#    environment:
+#      REDIS_PASSWORD: password
+    ports:
+      - "6379:6379"
+
   mysql:
     image: mysql
     container_name: mysql-container
@@ -19,8 +38,12 @@ services:
   # 어플리케이션이 시작되기 전에 의존하는 서비스를 정의합니다. 여기서는 MySQL 서비스가 먼저 시작되어야 하므로 depends_on을 사용하여 의존성을 명시합니다.
     depends_on:
       - mysql
+      - redis
   # Spring Boot 어플리케이션에 전달할 환경 변수들을 설정합니다. 여기서는 MySQL 데이터베이스에 접속하기 위한 데이터 소스 URL 및 계정 정보를 설정합니다
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+#      SPRING_DATA_REDIS_PASSWORD: password
