@@ -1,5 +1,16 @@
 version: '3'
 services:
+  minio:
+    image: bitnami/minio:2022
+    ports:
+      - "9090:9090"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+      MINIO_DEFAULT_BUCKETS: buckets
+      MINIO_ENDPOINT: minio:9090
+
   nginx:
     image: nginx
     container_name: nginx-container
