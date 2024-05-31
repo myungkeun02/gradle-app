@@ -24,9 +24,7 @@ services:
   redis:
     image: redis
     container_name: redis-container
-#    command: ["redis-server","--requirepass","password"]
-#    environment:
-#      REDIS_PASSWORD: password
+    command: redis-server --requirepass "Password@123"
     ports:
       - "6379:6379"
 
@@ -55,6 +53,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
-#      SPRING_DATA_REDIS_PASSWORD: password
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+#      SPRING_REDIS_PASSWORD: Password@123
