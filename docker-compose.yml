@@ -1,15 +1,5 @@
 version: '3'
 services:
-  minio:
-    image: minio:RELEASE.2022-11-11T03-44-20Z
-    container_name: minio-container
-    ports:
-      - "9090:9090"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: password
-    command: server /data --console-address ":9001"
 
   nginx:
     image: nginx
@@ -25,6 +15,8 @@ services:
     image: redis
     container_name: redis-container
     command: redis-server --requirepass "Password@123"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     ports:
       - "6379:6379"
 
@@ -47,16 +39,12 @@ services:
     depends_on:
       - mysql
       - redis
-      - minio
+#      - minio
   # Spring Boot 어플리케이션에 전달할 환경 변수들을 설정합니다. 여기서는 MySQL 데이터베이스에 접속하기 위한 데이터 소스 URL 및 계정 정보를 설정합니다
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
-      MINIO_URL: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
-      MINIO_BUCKET_NAME: mybucket
-#      SPRING_REDIS_PASSWORD: Password@123
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: Password@123

@@ -4,7 +4,7 @@ import java.time.Duration;
 
 
 public interface RedisService {
-    void setValues(String key, Object value, Duration duration);
+    void setValues(String key, String value, Duration duration);
     String getValue(String key);
     void delValue(String key);
 }

@@ -1,4 +1,3 @@
-// TestController.java
 package org.myungkeun.app_gradle;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ public class TestController {
                     .build();
             return postRepository.save(post);
         } catch (Exception e) {
-            logger.severe("dbPostApiTest에서 오류 발생: " + e.getMessage());
             throw e;
         }
     }
@@ -45,7 +43,7 @@ public class TestController {
                     .description(postRequest.getDescription())
                     .build();
             Post request = postRepository.save(post);
-            redisService.setValues("s", "s", Duration.ofMillis(300000));
+            redisService.setValues(String.valueOf(request.getId()), request.getTitle(), Duration.ofSeconds(30));
             return request;
         } catch (Exception e) {
             logger.severe("redisPostApiTest에서 오류 발생: " + e.getMessage());
